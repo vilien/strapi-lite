@@ -70,21 +70,25 @@ module.exports = function(strapi) {
   }, []);
 
   // Init admin controllers.
-  Object.keys(strapi.admin.controllers || []).forEach(key => {
-    if (!strapi.admin.controllers[key].identity) {
-      strapi.admin.controllers[key].identity = key;
-    }
-  });
+  if (strapi.config.get('server.admin.serveAdminPanel') !== false) {
+    Object.keys(strapi.admin.controllers || []).forEach(key => {
+      if (!strapi.admin.controllers[key].identity) {
+        strapi.admin.controllers[key].identity = key;
+      }
+    });
+  }
 
   // Init admin models.
-  Object.keys(strapi.admin.models || []).forEach(modelName => {
-    let model = strapi.admin.models[modelName];
+  if (strapi.config.get('server.admin.serveAdminPanel') !== false) {
+    Object.keys(strapi.admin.models || []).forEach(modelName => {
+      let model = strapi.admin.models[modelName];
 
-    // mutate model
-    contentTypesUtils.createContentType(model, { modelName, defaultConnection });
+      // mutate model
+      contentTypesUtils.createContentType(model, { modelName, defaultConnection });
 
-    strapi.contentTypes[model.uid] = model;
-  });
+      strapi.contentTypes[model.uid] = model;
+    });
+  }
 
   Object.keys(strapi.plugins).forEach(pluginName => {
     let plugin = strapi.plugins[pluginName];

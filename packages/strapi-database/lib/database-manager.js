@@ -55,10 +55,12 @@ class DatabaseManager {
       this.models.set(model.uid, model);
     });
 
-    Object.keys(this.strapi.admin.models).forEach(modelKey => {
-      const model = this.strapi.admin.models[modelKey];
-      this.models.set(model.uid, model);
-    });
+    if (strapi.config.get('server.admin.serveAdminPanel') !== false) {
+      Object.keys(this.strapi.admin.models).forEach(modelKey => {
+        const model = this.strapi.admin.models[modelKey];
+        this.models.set(model.uid, model);
+      });
+    }
 
     Object.keys(this.strapi.plugins).forEach(pluginKey => {
       Object.keys(this.strapi.plugins[pluginKey].models).forEach(modelKey => {
@@ -154,8 +156,10 @@ class DatabaseManager {
     if (!pluginName) {
       return strapi.models;
     }
-
-    return pluginName === 'admin' ? strapi.admin.models : strapi.plugins[pluginName].models;
+    if (strapi.config.get('server.admin.serveAdminPanel') !== false) {
+      return pluginName === 'admin' ? strapi.admin.models : strapi.plugins[pluginName].models;
+    }
+    return pluginName === 'admin' ? [] : strapi.plugins[pluginName].models;
   }
 
   getReservedNames() {

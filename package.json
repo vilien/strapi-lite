@@ -1,6 +1,9 @@
 {
   "name": "strapi-lite-monorepo",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/vilien/strapi-lite.git"

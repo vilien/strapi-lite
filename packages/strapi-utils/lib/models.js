@@ -38,6 +38,10 @@ module.exports = {
       other: '',
     };
 
+    if (strapi.config.get('server.admin.serveAdminPanel') === false && attribute.plugin === 'admin') {
+      attribute.plugin = undefined;
+    }
+
     const models = strapi.db.getModelsByPluginName(attribute.plugin);
 
     const pluginModels = Object.values(strapi.plugins).reduce((acc, plugin) => {
@@ -410,7 +414,7 @@ module.exports = {
         return;
       }
 
-      if (_.has(association, 'model') && association.model !== '*') {
+      if (targetModel && _.has(association, 'model') && association.model !== '*') {
         definition.associations.push({
           alias: key,
           type: 'model',

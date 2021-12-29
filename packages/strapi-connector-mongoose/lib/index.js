@@ -151,7 +151,7 @@ module.exports = function(strapi) {
       return Promise.all([
         mountComponents(connectionName, ctx),
         mountApis(connectionName, ctx),
-        mountAdmin(connectionName, ctx),
+        strapi.config.get('server.admin.serveAdminPanel') !== false && mountAdmin(connectionName, ctx),
         mountPlugins(connectionName, ctx),
       ]);
     });

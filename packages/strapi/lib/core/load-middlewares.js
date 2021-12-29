@@ -27,7 +27,9 @@ module.exports = async function(strapi) {
   // local plugin middlewares
   await loaders.loadLocalPluginsMiddlewares(appPath, middlewares);
   // load admin middlwares
-  await loaders.loadAdminMiddlewares(middlewares);
+  if (strapi.config.get('server.admin.serveAdminPanel') !== false) {
+    await loaders.loadAdminMiddlewares(middlewares);
+  }
 
   return middlewares;
 };

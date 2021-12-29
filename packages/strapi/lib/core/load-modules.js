@@ -23,7 +23,7 @@ const loadComponents = require('./load-components');
 module.exports = async strapi => {
   const [api, admin, plugins, middlewares, hook, extensions, components] = await Promise.all([
     loadApis(strapi),
-    loadAdmin(strapi),
+    strapi.config.get('server.admin.serveAdminPanel') !== false && loadAdmin(strapi),
     loadPlugins(strapi),
     loadMiddlewares(strapi),
     loadHooks(strapi.config),

@@ -49,6 +49,7 @@ const loadPluginsHooks = async (plugins, hooks) => {
 };
 
 const loadAdminHooks = async hooks => {
+  if (strapi.config.get('server.admin.serveAdminPanel') === false) return;
   const hooksDir = 'hooks';
   const dir = path.resolve(findPackagePath('strapi-admin'), hooksDir);
   await loadHooksInDir(dir, hooks);

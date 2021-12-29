@@ -55,23 +55,25 @@ module.exports = async ({ models, target }, ctx) => {
 
       const isPrivate = !_.get(definition, 'options.populateCreatorFields', false);
 
-      definition.attributes[CREATED_BY_ATTRIBUTE] = {
-        model: 'user',
-        plugin: 'admin',
-        configurable: false,
-        writable: false,
-        visible: false,
-        private: isPrivate,
-      };
+      if (strapi.config.get('server.admin.serveAdminPanel') !== false) {
+        definition.attributes[CREATED_BY_ATTRIBUTE] = {
+          model: 'user',
+          plugin: 'admin',
+          configurable: false,
+          writable: false,
+          visible: false,
+          private: isPrivate,
+        };
 
-      definition.attributes[UPDATED_BY_ATTRIBUTE] = {
-        model: 'user',
-        plugin: 'admin',
-        configurable: false,
-        writable: false,
-        visible: false,
-        private: isPrivate,
-      };
+        definition.attributes[UPDATED_BY_ATTRIBUTE] = {
+          model: 'user',
+          plugin: 'admin',
+          configurable: false,
+          writable: false,
+          visible: false,
+          private: isPrivate,
+        };
+      }
     }
 
     const componentAttributes = Object.keys(definition.attributes).filter(key =>
